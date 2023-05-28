@@ -1,4 +1,4 @@
-# Course Work: Online video chat using microservice architecture
+# 🎥 🧍 🚀 Course Work: Online video chat using microservice architecture
 
 This course work presents an Online Video Chat Application developed using Microservice architecture.
 
