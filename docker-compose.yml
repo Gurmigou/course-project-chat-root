@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  discovery:
+    image: gurmigou/video-chat-discovery-service:1
+    container_name: discovery
+    ports:
+      - "8010:8010"
+    networks:
+      - video_chat_network
+
+  gateway:
+    image: gurmigou/video-chat-gateway-service:2
+    container_name: gateway
+    ports:
+      - "8082:8082"
+    depends_on:
+      - discovery
+    networks:
+      - video_chat_network
+
+  recommendation:
+    image: gurmigou/video-chat-recommendation-service:2
+    container_name: recommendation
+    ports:
+      - "8086:8086"
+    depends_on:
+      - discovery
+    networks:
+      - video_chat_network
+
+  user:
+    image: gurmigou/video-chat-user-service:2
+    container_name: user
+    ports:
+      - "8085:8085"
+    depends_on:
+      - db
+      - discovery
+#      db:
+#        condition: service_healthy
+
+    networks:
+      - video_chat_network
+
+  db:
+    image: mysql:8.0.33
+    container_name: db
+#    healthcheck:
+#      test: [ "CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-proot' ]
+#      interval: 3s
+#      retries: 120
+    environment:
+      MYSQL_DATABASE: video_chat_user
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - video_chat_network
+
+  signaling_server:
+    image: gurmigou/video-chat-signaling-server:2
+    container_name: signaling_server
+    ports:
+      - "3020:3020"
+
+volumes:
+  db_data:
+
+networks:
+  video_chat_network:
+
