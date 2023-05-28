@@ -37,8 +37,6 @@ services:
     depends_on:
       - db
       - discovery
-#      db:
-#        condition: service_healthy
 
     networks:
       - video_chat_network
@@ -46,10 +44,6 @@ services:
   db:
     image: mysql:8.0.33
     container_name: db
-#    healthcheck:
-#      test: [ "CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-proot' ]
-#      interval: 3s
-#      retries: 120
     environment:
       MYSQL_DATABASE: video_chat_user
       MYSQL_ROOT_PASSWORD: root
